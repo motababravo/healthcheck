@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.cert.X509Certificate;
@@ -71,6 +72,12 @@ public class HealthCheckServlet extends HttpServlet {
 
                 int responseCode = connection.getResponseCode();
                 if (responseCode == HttpURLConnection.HTTP_OK) {
+                    BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    String inputLine;
+                    while ((inputLine = in.readLine()) != null) {
+                        responseBody.append(inputLine);
+                    }
+                    in.close();
                     responseBody.append(targetUrl).append(": OK!\n"); // Append OK status
                 } else {
                     allTargetsOK = false; // Set the flag to false if any target fails
