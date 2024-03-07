@@ -15,7 +15,7 @@ import java.io.InputStreamReader;
 @WebServlet("/*")
 public class HealthCheckServlet extends HttpServlet {
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String configFilePath = "/opt/props/healthcheck.conf";
         BufferedReader reader = new BufferedReader(new FileReader(configFilePath));
         String[] targetUrls = {};
@@ -40,7 +40,7 @@ public class HealthCheckServlet extends HttpServlet {
             try {
                 URL url = new URL(targetUrl);
                 connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("GET");
+                connection.setRequestMethod("POST"); // Changed to POST
                 connection.setConnectTimeout(timeout * 1000);
                 connection.setReadTimeout(timeout * 1000);
 
